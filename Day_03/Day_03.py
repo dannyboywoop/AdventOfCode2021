@@ -38,22 +38,22 @@ def b_lessthan_a(a, b):
 
 
 def calc_gas_val(data, num_length, comparison):
-    all_data = data
-    for i in range(num_length):
+    remaining_data = data
+    for test_index in range(num_length):
         one_data = []
         zero_data = []
-        for item in all_data:
-            if item[i]:
-                one_data.append(item)
+        for value in remaining_data:
+            if value[test_index]:
+                one_data.append(value)
             else:
-                zero_data.append(item)
+                zero_data.append(value)
         if comparison(len(one_data), len(zero_data)):
-            all_data = one_data
+            remaining_data = one_data
         else:
-            all_data = zero_data
-        if len(all_data) == 1:
+            remaining_data = zero_data
+        if len(remaining_data) == 1:
             break
-    return bin_array_to_dec(all_data[0])
+    return bin_array_to_dec(remaining_data[0])
 
 
 def life_support_vals(data, num_length):
