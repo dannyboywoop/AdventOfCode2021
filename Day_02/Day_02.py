@@ -2,18 +2,18 @@ from aoc_tools import Advent_Timer
 
 
 MOVE_DEFINITIONS_1 = {
-    "forward": (lambda pos, dist: Position(pos.x + dist, pos.depth)),
-    "down": (lambda pos, dist: Position(pos.x, pos.depth + dist)),
-    "up": (lambda pos, dist: Position(pos.x, pos.depth - dist))
+    "forward": (lambda pos, dist: (pos.x + dist, pos.depth, pos.aim)),
+    "down": (lambda pos, dist: (pos.x, pos.depth + dist, pos.aim)),
+    "up": (lambda pos, dist: (pos.x, pos.depth - dist, pos.aim))
 }
 
 
 MOVE_DEFINITIONS_2 = {
-    "forward": (lambda pos, dist: Position(pos.x + dist,
-                                           pos.depth + pos.aim*dist,
-                                           pos.aim)),
-    "down": (lambda pos, dist: Position(pos.x, pos.depth, pos.aim + dist)),
-    "up": (lambda pos, dist: Position(pos.x, pos.depth, pos.aim - dist))
+    "forward": (lambda pos, dist: (pos.x + dist,
+                                   pos.depth + pos.aim*dist,
+                                   pos.aim)),
+    "down": (lambda pos, dist: (pos.x, pos.depth, pos.aim + dist)),
+    "up": (lambda pos, dist: (pos.x, pos.depth, pos.aim - dist))
 }
 
 
@@ -23,24 +23,24 @@ class Position:
         self.depth = depth
         self.aim = aim
 
+    def make_move(self, move, move_defs):
+        direction, dist = move
+
+        self.x, self.depth, self.aim = move_defs[direction](self, dist)
+
 
 def read_input(filename="input.txt"):
     with open(filename, "r") as file:
         data = [line.strip().split() for line in file]
-    return data
-
-
-def make_move(move, position, move_definitions):
-    direction, distance = move
-
-    return move_definitions[direction](position, int(distance))
+        data_cast = [(direction, int(dist)) for direction, dist in data]
+    return data_cast
 
 
 def make_all_moves(move_set, move_definitions):
     position = Position()
 
     for move in move_set:
-        position = make_move(move, position, move_definitions)
+        position.make_move(move, move_definitions)
 
     return position
 
