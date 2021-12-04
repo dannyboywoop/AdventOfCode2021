@@ -31,16 +31,21 @@ class BingoCard:
 
     def check_for_win(self, spot):
         # check row
-        row_win = True
+        won = True
         for j in range(len(self.grid[spot.row])):
-            row_win &= self.map[self.grid[spot.row][j]].marked
+            if not self.map[self.grid[spot.row][j]].marked:
+                won = False
+                break
 
-        # check col
-        col_win = True
-        for i in range(len(self.grid)):
-            col_win &= self.map[self.grid[i][spot.col]].marked
+        if not won:
+            # check col
+            won = True
+            for i in range(len(self.grid)):
+                if not self.map[self.grid[i][spot.col]].marked:
+                    won = False
+                    break
 
-        return row_win or col_win
+        return won
 
 
 def read_input(filename="input.txt"):
