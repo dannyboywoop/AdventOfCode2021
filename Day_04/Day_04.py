@@ -2,6 +2,15 @@ from aoc_tools import Advent_Timer
 
 
 class BingoCard:
+    class Spot:
+        def __init__(self, row, col, marked=False):
+            self.row = row
+            self.col = col
+            self.marked = marked
+
+        def mark(self):
+            self.marked = True
+
     def __init__(self, card_string):
         self.grid = [row.split() for row in card_string.split("\n")]
         self.create_map()
@@ -11,25 +20,25 @@ class BingoCard:
 
         for i in range(len(self.grid)):
             for j in range(len(self.grid[i])):
-                self.map[self.grid[i][j]] = [i, j, False]
+                self.map[self.grid[i][j]] = self.Spot(i, j)
 
     def mark_card(self, num):
         if num in self.map:
-            self.map[num][2] = True
-            return self.check_for_win(*self.map[num])
+            self.map[num].mark()
+            return self.check_for_win(self.map[num])
         else:
             return False
 
-    def check_for_win(self, row, col, *args):
+    def check_for_win(self, spot):
         # check row
         row_win = True
-        for j in range(len(self.grid[row])):
-            row_win &= self.map[self.grid[row][j]][2]
+        for j in range(len(self.grid[spot.row])):
+            row_win &= self.map[self.grid[spot.row][j]].marked
 
         # check col
         col_win = True
         for i in range(len(self.grid)):
-            col_win &= self.map[self.grid[i][col]][2]
+            col_win &= self.map[self.grid[i][spot.col]].marked
 
         return row_win or col_win
 
@@ -56,8 +65,8 @@ def find_winning_card(sequence, cards):
 
 def calculate_score(winning_card, winning_num):
     total = 0
-    for num, val in winning_card.map.items():
-        if not val[2]:
+    for num, spot in winning_card.map.items():
+        if not spot.marked:
             total += int(num)
 
     return total * int(winning_num)
