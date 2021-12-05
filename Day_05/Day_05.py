@@ -46,10 +46,10 @@ def read_input(filename="input.txt"):
     return data
 
 
-def find_overlaps(lines):
+def find_overlaps(lines, include_diagonals=False):
     occurrences = {}
     for line in lines:
-        if line.is_diagonal():
+        if line.is_diagonal() and not include_diagonals:
             continue
 
         for point in line.points:
@@ -75,6 +75,8 @@ if __name__ == "__main__":
     timer.checkpoint_hit()
 
     # star 2
+    star_2_answer = find_overlaps(lines, include_diagonals=True)
+    print("Star 2: {}".format(star_2_answer))
     timer.checkpoint_hit()
 
     timer.end_hit()
