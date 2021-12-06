@@ -1,6 +1,10 @@
 from aoc_tools import Advent_Timer
 
 
+NEW_FISH_GESTATION = 9
+OLD_FISH_GESTATION = 7
+
+
 def read_input(filename="input.txt"):
     with open(filename, "r") as file:
         data = [int(x) for x in file.read().split(",")]
@@ -8,15 +12,21 @@ def read_input(filename="input.txt"):
 
 
 def evolve(system):
-    temp = system[0]
-    for i in range(1, 9):
+    birthing_fish = system[0]
+
+    # decrease remaining days for each fish
+    for i in range(1, NEW_FISH_GESTATION):
         system[i-1] = system[i]
-    system[6] += temp
-    system[8] = temp
+
+    # add new babies
+    system[NEW_FISH_GESTATION-1] = birthing_fish
+
+    # reset new mothers
+    system[OLD_FISH_GESTATION-1] += birthing_fish
 
 
 def fish_after_n_steps(fish, n):
-    system = {x: 0 for x in range(9)}
+    system = [0] * NEW_FISH_GESTATION
 
     # initialise system
     for f in fish:
@@ -27,7 +37,7 @@ def fish_after_n_steps(fish, n):
         evolve(system)
 
     # count fish
-    return sum(list(system.values()))
+    return sum(system)
 
 
 if __name__ == "__main__":
