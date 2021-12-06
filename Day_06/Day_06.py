@@ -44,6 +44,8 @@ if __name__ == "__main__":
     timer.checkpoint_hit()
 
     # star 2
+    star_2_answer = fish_after_n_steps(data, 256)
+    print("Star 2: {}".format(star_2_answer))
     timer.checkpoint_hit()
 
     timer.end_hit()
